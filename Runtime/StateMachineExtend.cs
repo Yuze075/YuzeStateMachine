@@ -1,66 +1,52 @@
-﻿using System.Collections.Generic;
-using System;
-
-namespace YuzeToolkit.Framework.StateMachine
+﻿namespace YuzeToolkit.Framework.StateMachine
 {
-    /// <summary>
-    /// 状态机的抽象积累
-    /// </summary>
-    public abstract class StateMachine
+    public static class StateMachineExtend
     {
-        /// <summary>
-        /// 储存不同的状态
-        /// </summary>
-        protected Dictionary<Type, State> States { get; } = new();
-        /// <summary>
-        /// 当前状态
-        /// </summary>
-        protected State CurrentState { get; set; }
-
         /// <summary>
         /// 添加节点
         /// </summary>
         /// <typeparam name="T">继承自<see cref="State"/>的类型，并且存在空构造函数<code>new()</code></typeparam>
-        public void AddNode<T>() where T : State, new()
+        public static void AddNode<T>(this IStateMachine stateMachine) where T : State, new()
         {
-            AddNode(new T());
+            AddNode(stateMachine, new T());
         }
 
         /// <summary>
         /// 添加节点
         /// </summary>
+        /// <param name="stateMachine"></param>
         /// <param name="state">一个实例化完成的状态</param>
-        public void AddNode(State state)
+        public static void AddNode(this IStateMachine stateMachine, State state)
         {
             var type = state.GetType();
-            if (States.ContainsKey(type))
+            if (stateMachine.States.ContainsKey(type))
             {
                 Logger.Warning($"[StateMachine.ChangeState]: {type} already in StateMachine");
                 return;
             }
 
-            state.OnAddToStateMachine(this);
-            States.Add(type, state);
+            state.OnAddToStateMachine(stateMachine);
+            stateMachine.States.Add(type, state);
         }
 
         /// <summary>
         /// 切换状态
         /// </summary>
         /// <typeparam name="T">继承自<see cref="State"/>的类型</typeparam>
-        public void ChangeState<T>() where T : State
+        public static void ChangeState<T>(this IStateMachine stateMachine) where T : State
         {
             var type = typeof(T);
-            if (!States.ContainsKey(type))
+            if (!stateMachine.States.ContainsKey(type))
             {
                 Logger.Warning($"[StateMachine.ChangeState]: {type} is not in StateMachine");
                 return;
             }
 
-            var beforeState = CurrentState;
-            var afterState = States[type];
+            var beforeState = stateMachine.CurrentState;
+            var afterState = stateMachine.States[type];
             beforeState.OnEnter(afterState);
             afterState.OnEnter(beforeState);
-            CurrentState = afterState;
+            stateMachine.CurrentState = afterState;
         }
     }
 }

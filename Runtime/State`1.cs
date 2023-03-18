@@ -1,6 +1,6 @@
 ﻿namespace YuzeToolkit.Framework.StateMachine
 {
-    public abstract class State<T> : State where T : StateMachine
+    public abstract class State<T> : State where T : IStateMachine
     {
         protected State(T stateMachineScript)
         {

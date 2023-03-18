@@ -1,8 +1,14 @@
-﻿namespace YuzeToolkit.Framework.StateMachine
+﻿using System;
+using System.Collections.Generic;
+
+namespace YuzeToolkit.Framework.StateMachine
 {
-    public class SimpleStateMachine :StateMachine
+    public class SimpleStateMachine : IStateMachine
     {
         private bool _isRunning;
+        public Dictionary<Type, State> States { get; } = new();
+        public State CurrentState { get; set; }
+
         public void Update()
         {
             if (CurrentState == null) return;
