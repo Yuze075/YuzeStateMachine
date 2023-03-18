@@ -26,14 +26,14 @@
         /// 进入状态调用的函数
         /// </summary>
         /// <param name="beforeState">前一个状态</param>
-        public void OnEnter(State beforeState)
+        public virtual void OnEnter(State beforeState)
         {
         }
 
         /// <summary>
         /// 状态更新函数
         /// </summary>
-        public void OnUpdate()
+        public virtual void OnUpdate()
         {
         }
 
@@ -41,7 +41,7 @@
         /// 状态检查函数，应该在状态更新函数之后调用
         /// 将更新更新和状态切换分离，方便维护
         /// </summary>
-        public void OnCheckChange()
+        public virtual void OnCheckChange()
         {
         }
 
@@ -49,7 +49,7 @@
         /// 退出状态调用的函数
         /// </summary>
         /// <param name="afterState">后一个状态</param>
-        public void OnExit(State afterState)
+        public virtual void OnExit(State afterState)
         {
         }
     }
