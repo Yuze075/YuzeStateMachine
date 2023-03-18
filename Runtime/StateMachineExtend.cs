@@ -44,7 +44,7 @@
 
             var beforeState = stateMachine.CurrentState;
             var afterState = stateMachine.States[type];
-            beforeState.OnEnter(afterState);
+            beforeState.OnExit(afterState);
             afterState.OnEnter(beforeState);
             stateMachine.CurrentState = afterState;
         }
